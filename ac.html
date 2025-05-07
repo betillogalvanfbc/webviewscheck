@@ -1,6 +1,8 @@
 <!-- script that load a firebug lite version to get the webview debuggin console inside the app -->
 <script src='https://getfirebug.com/firebug-lite-debug.js'></script>
+
 <script>
+  alert('WebView origin=' + location.origin);
 // iterating the navigator object that contain interesting info from the user device, iOS version, iOS device, language
 var nav = {};
 for (var property in screen) {
