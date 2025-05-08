@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<body>
+<script>
+// 1. Listar todas las propiedades globales
+const interfaces = [];
+for (let prop in window) {
+  if (
+    prop.includes('bridge') || 
+    prop.includes('Android') ||
+    prop.includes('Java') || 
+    prop.toLowerCase().includes('native')
+  ) {
+    interfaces.push({
+      name: prop,
+      type: typeof window[prop],
+      value: String(window[prop]).slice(0, 100)
+    });
+  }
+}
+
+// 2. Verificar puentes comunes
+const bridges = [
+  'WebViewBridge', 
+  'AndroidHandler',
+  'jsBridge',
+  '_hybrid'
+].filter(name => name in window);
+
+// 3. Resultados
+document.body.innerHTML = `
+  <h2>Interfaces JavaScript</h2>
+  <pre>${JSON.stringify(interfaces, null, 2)}</pre>
+  
+  <h2>Puentes detectados</h2>
+  <pre>${JSON.stringify(bridges, null, 2)}</pre>
+`;
+</script>
+</body>
+</html>
