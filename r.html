@@ -41,10 +41,10 @@
 
   /* 4) Envía a tu endpoint (usa fetch + JSON) */
   try {
-    await fetch('https://webhook.site/2987fab5-8cd1-4000-b483-d6e2eef59af2', {
-      method : 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body   : JSON.stringify(env)
+   await fetch('https://webhook.site/2987fab5-8cd1-4000-b483-d6e2eef59af2', {
+  method : 'POST',
+  mode   : 'no-cors',             // <-- evita OPTIONS
+  body   : JSON.stringify(env)    // <-- env es tu objeto con datos
     });
   } catch (e) {
     console.error('Webhook error', e);
